@@ -33,6 +33,46 @@ export type Scalars = {
   uuid: any;
 };
 
+export type BggLink = {
+  __typename?: "BggLink";
+  id: Scalars["Int"];
+  inbound?: Maybe<Scalars["Boolean"]>;
+  type: Scalars["String"];
+  value: Scalars["String"];
+};
+
+export type BggName = {
+  __typename?: "BggName";
+  sortindex?: Maybe<Scalars["String"]>;
+  type: Scalars["String"];
+  value: Scalars["String"];
+};
+
+export type BggSearchResult = {
+  __typename?: "BggSearchResult";
+  id: Scalars["Int"];
+  name: Scalars["String"];
+  nameType: Scalars["String"];
+  type: Scalars["String"];
+  yearpublished: Scalars["Int"];
+};
+
+export type BoardGame = {
+  __typename?: "BoardGame";
+  depth: Scalars["Float"];
+  id: Scalars["Int"];
+  image: Scalars["String"];
+  length: Scalars["Float"];
+  links: Array<Maybe<BggLink>>;
+  names: Array<Maybe<BggName>>;
+  productcode: Scalars["String"];
+  thumbnail: Scalars["String"];
+  type: Scalars["String"];
+  weight: Scalars["Float"];
+  width: Scalars["Float"];
+  yearpublished: Scalars["Int"];
+};
+
 /** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
 export type Int_Comparison_Exp = {
   _eq?: Maybe<Scalars["Int"]>;
@@ -739,6 +779,10 @@ export type Query_Root = {
   feeds_aggregate: Feeds_Aggregate;
   /** fetch data from the table: "feeds" using primary key columns */
   feeds_by_pk?: Maybe<Feeds>;
+  getBoardGame?: Maybe<BoardGame>;
+  hotGames?: Maybe<Array<Maybe<BggSearchResult>>>;
+  sayHello?: Maybe<Scalars["String"]>;
+  searchBoardGames?: Maybe<Array<Maybe<BggSearchResult>>>;
   /** fetch data from the table: "sessions" */
   sessions: Array<Sessions>;
   /** fetch aggregated fields from the table: "sessions" */
@@ -797,6 +841,14 @@ export type Query_RootFeeds_AggregateArgs = {
 
 export type Query_RootFeeds_By_PkArgs = {
   id: Scalars["uuid"];
+};
+
+export type Query_RootGetBoardGameArgs = {
+  id: Scalars["Int"];
+};
+
+export type Query_RootSearchBoardGamesArgs = {
+  query: Scalars["String"];
 };
 
 export type Query_RootSessionsArgs = {
@@ -1607,8 +1659,9 @@ export type InsertFeedMutationVariables = Exact<{
   body?: Maybe<Scalars["String"]>;
 }>;
 
-export type InsertFeedMutation = { __typename?: "mutation_root" } & {
-  insert_feeds_one?: Maybe<{ __typename?: "feeds" } & Pick<Feeds, "id">>;
+export type InsertFeedMutation = {
+  __typename?: "mutation_root";
+  insert_feeds_one?: Maybe<{ __typename?: "feeds"; id: any }>;
 };
 
 export type UpdateUserMutationVariables = Exact<{
@@ -1616,32 +1669,39 @@ export type UpdateUserMutationVariables = Exact<{
   name?: Maybe<Scalars["String"]>;
 }>;
 
-export type UpdateUserMutation = { __typename?: "mutation_root" } & {
-  update_users?: Maybe<
-    { __typename?: "users_mutation_response" } & {
-      returning: Array<{ __typename?: "users" } & Pick<Users, "id" | "name">>;
-    }
-  >;
+export type UpdateUserMutation = {
+  __typename?: "mutation_root";
+  update_users?: Maybe<{
+    __typename?: "users_mutation_response";
+    returning: Array<{ __typename?: "users"; id: any; name?: Maybe<string> }>;
+  }>;
 };
 
 export type FetchUserQueryVariables = Exact<{
   userId: Scalars["uuid"];
 }>;
 
-export type FetchUserQuery = { __typename?: "query_root" } & {
-  users_by_pk?: Maybe<{ __typename?: "users" } & Pick<Users, "id" | "name">>;
+export type FetchUserQuery = {
+  __typename?: "query_root";
+  users_by_pk?: Maybe<{ __typename?: "users"; id: any; name?: Maybe<string> }>;
 };
 
 export type FetchFeedsSubscriptionVariables = Exact<{ [key: string]: never }>;
 
-export type FetchFeedsSubscription = { __typename?: "subscription_root" } & {
-  feeds: Array<
-    { __typename?: "feeds" } & Pick<Feeds, "id" | "created_at" | "body"> & {
-        author?: Maybe<
-          { __typename?: "users" } & Pick<Users, "id" | "name" | "image">
-        >;
-      }
-  >;
+export type FetchFeedsSubscription = {
+  __typename?: "subscription_root";
+  feeds: Array<{
+    __typename?: "feeds";
+    id: any;
+    created_at: string;
+    body: string;
+    author?: Maybe<{
+      __typename?: "users";
+      id: any;
+      name?: Maybe<string>;
+      image?: Maybe<string>;
+    }>;
+  }>;
 };
 
 export const InsertFeedDocument = gql`
@@ -2054,23 +2114,9 @@ export type ResolverTypeWrapper<T> = Promise<T> | T;
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-
-export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  fragment: string;
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-
-export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  selectionSet: string;
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-export type StitchingResolver<TResult, TParent, TContext, TArgs> =
-  | LegacyStitchingResolver<TResult, TParent, TContext, TArgs>
-  | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
   | ResolverFn<TResult, TParent, TContext, TArgs>
-  | ResolverWithResolve<TResult, TParent, TContext, TArgs>
-  | StitchingResolver<TResult, TParent, TContext, TArgs>;
+  | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -2170,11 +2216,16 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Int_comparison_exp: Int_Comparison_Exp;
+  BggLink: ResolverTypeWrapper<BggLink>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
-  String_comparison_exp: String_Comparison_Exp;
   String: ResolverTypeWrapper<Scalars["String"]>;
+  BggName: ResolverTypeWrapper<BggName>;
+  BggSearchResult: ResolverTypeWrapper<BggSearchResult>;
+  BoardGame: ResolverTypeWrapper<BoardGame>;
+  Float: ResolverTypeWrapper<Scalars["Float"]>;
+  Int_comparison_exp: Int_Comparison_Exp;
+  String_comparison_exp: String_Comparison_Exp;
   accounts: ResolverTypeWrapper<Accounts>;
   accounts_aggregate: ResolverTypeWrapper<Accounts_Aggregate>;
   accounts_aggregate_fields: ResolverTypeWrapper<Accounts_Aggregate_Fields>;
@@ -2216,7 +2267,6 @@ export type ResolversTypes = {
   sessions_aggregate: ResolverTypeWrapper<Sessions_Aggregate>;
   sessions_aggregate_fields: ResolverTypeWrapper<Sessions_Aggregate_Fields>;
   sessions_avg_fields: ResolverTypeWrapper<Sessions_Avg_Fields>;
-  Float: ResolverTypeWrapper<Scalars["Float"]>;
   sessions_bool_exp: Sessions_Bool_Exp;
   sessions_constraint: Sessions_Constraint;
   sessions_inc_input: Sessions_Inc_Input;
@@ -2277,11 +2327,16 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Int_comparison_exp: Int_Comparison_Exp;
+  BggLink: BggLink;
   Int: Scalars["Int"];
   Boolean: Scalars["Boolean"];
-  String_comparison_exp: String_Comparison_Exp;
   String: Scalars["String"];
+  BggName: BggName;
+  BggSearchResult: BggSearchResult;
+  BoardGame: BoardGame;
+  Float: Scalars["Float"];
+  Int_comparison_exp: Int_Comparison_Exp;
+  String_comparison_exp: String_Comparison_Exp;
   accounts: Accounts;
   accounts_aggregate: Accounts_Aggregate;
   accounts_aggregate_fields: Accounts_Aggregate_Fields;
@@ -2316,7 +2371,6 @@ export type ResolversParentTypes = {
   sessions_aggregate: Sessions_Aggregate;
   sessions_aggregate_fields: Sessions_Aggregate_Fields;
   sessions_avg_fields: Sessions_Avg_Fields;
-  Float: Scalars["Float"];
   sessions_bool_exp: Sessions_Bool_Exp;
   sessions_inc_input: Sessions_Inc_Input;
   sessions_insert_input: Sessions_Insert_Input;
@@ -2377,6 +2431,70 @@ export type CachedDirectiveResolver<
   ContextType = any,
   Args = CachedDirectiveArgs
 > = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type BggLinkResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["BggLink"] = ResolversParentTypes["BggLink"]
+> = {
+  id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  inbound?: Resolver<Maybe<ResolversTypes["Boolean"]>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BggNameResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["BggName"] = ResolversParentTypes["BggName"]
+> = {
+  sortindex?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
+  type?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BggSearchResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["BggSearchResult"] = ResolversParentTypes["BggSearchResult"]
+> = {
+  id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  nameType?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  yearpublished?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BoardGameResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["BoardGame"] = ResolversParentTypes["BoardGame"]
+> = {
+  depth?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  image?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  length?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  links?: Resolver<
+    Array<Maybe<ResolversTypes["BggLink"]>>,
+    ParentType,
+    ContextType
+  >;
+  names?: Resolver<
+    Array<Maybe<ResolversTypes["BggName"]>>,
+    ParentType,
+    ContextType
+  >;
+  productcode?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  thumbnail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  weight?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  width?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  yearpublished?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type AccountsResolvers<
   ContextType = any,
@@ -2895,6 +3013,24 @@ export type Query_RootResolvers<
     ParentType,
     ContextType,
     RequireFields<Query_RootFeeds_By_PkArgs, "id">
+  >;
+  getBoardGame?: Resolver<
+    Maybe<ResolversTypes["BoardGame"]>,
+    ParentType,
+    ContextType,
+    RequireFields<Query_RootGetBoardGameArgs, "id">
+  >;
+  hotGames?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["BggSearchResult"]>>>,
+    ParentType,
+    ContextType
+  >;
+  sayHello?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  searchBoardGames?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["BggSearchResult"]>>>,
+    ParentType,
+    ContextType,
+    RequireFields<Query_RootSearchBoardGamesArgs, "query">
   >;
   sessions?: Resolver<
     Array<ResolversTypes["sessions"]>,
@@ -3560,6 +3696,10 @@ export type Verification_Requests_Mutation_ResponseResolvers<
 };
 
 export type Resolvers<ContextType = any> = {
+  BggLink?: BggLinkResolvers<ContextType>;
+  BggName?: BggNameResolvers<ContextType>;
+  BggSearchResult?: BggSearchResultResolvers<ContextType>;
+  BoardGame?: BoardGameResolvers<ContextType>;
   accounts?: AccountsResolvers<ContextType>;
   accounts_aggregate?: Accounts_AggregateResolvers<ContextType>;
   accounts_aggregate_fields?: Accounts_Aggregate_FieldsResolvers<ContextType>;
@@ -3605,18 +3745,6 @@ export type Resolvers<ContextType = any> = {
   verification_requests_mutation_response?: Verification_Requests_Mutation_ResponseResolvers<ContextType>;
 };
 
-/**
- * @deprecated
- * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
- */
-export type IResolvers<ContextType = any> = Resolvers<ContextType>;
 export type DirectiveResolvers<ContextType = any> = {
   cached?: CachedDirectiveResolver<any, any, ContextType>;
 };
-
-/**
- * @deprecated
- * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
- */
-export type IDirectiveResolvers<ContextType = any> =
-  DirectiveResolvers<ContextType>;

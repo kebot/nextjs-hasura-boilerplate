@@ -1,1 +1,7 @@
-[]
+[
+  {
+    'name': 'bgg',
+    'definition': { 'url': 'http://frontend:3000/api/graphql', 'timeout_seconds': 60 },
+    'comment': '',
+  },
+]
