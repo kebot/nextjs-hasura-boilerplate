@@ -1,0 +1,55 @@
+table:
+  schema: public
+  name: reviews
+object_relationships:
+- name: author
+  using:
+    manual_configuration:
+      remote_table:
+        schema: public
+        name: users
+      insertion_order:
+      column_mapping:
+        author_id: id
+insert_permissions:
+- role: user
+  permission:
+    check: {}
+    columns:
+    - id
+    - author_id
+    - game_id
+    - rating
+    - body
+    - created_at
+    - updated_at
+    backend_only: false
+select_permissions:
+- role: user
+  permission:
+    columns:
+    - game_id
+    - rating
+    - body
+    - created_at
+    - updated_at
+    - author_id
+    - id
+    filter: {}
+update_permissions:
+- role: user
+  permission:
+    columns:
+    - game_id
+    - rating
+    - body
+    - created_at
+    - updated_at
+    - author_id
+    - id
+    filter: {}
+    check:
+delete_permissions:
+- role: user
+  permission:
+    filter: {}

@@ -3,3 +3,4 @@
 - "!include public_sessions.yaml"
 - "!include public_users.yaml"
 - "!include public_verification_requests.yaml"
+- "!include public_reviews.yaml"
