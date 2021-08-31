@@ -1,0 +1,15 @@
+query FetchReview($author_id: uuid!, $game_id: Int!) {
+  reviews(where: {author_id: {_eq: $author_id}, game_id: {_eq: $game_id}}) {
+    body,
+    id,
+    rating,
+    game_id,
+    author_id,
+    author {
+      id,
+      image,
+      name,
+      email
+    }
+  }
+}

@@ -1,0 +1,7 @@
+query fetchHotGames {
+  hotGames {
+    name
+    yearpublished
+    id
+  }
+}

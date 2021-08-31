@@ -1,0 +1,15 @@
+mutation InsertReview (
+  $author_id: uuid!, 
+  $game_id: Int!, 
+  $rating: smallint!, 
+  $body: String
+) {
+  insert_reviews_one(object: {
+    author_id: $author_id,
+    game_id: $game_id,
+    rating: $rating,
+    body: $body
+  }) {
+    id
+  }
+}

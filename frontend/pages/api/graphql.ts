@@ -1,12 +1,11 @@
+// A simple Graphql server that wrap the Board Game Geek JS API
+
 import { ApolloServer, gql } from 'apollo-server-micro'
 import { PageConfig } from 'next';
 import { MicroRequest } from 'apollo-server-micro/dist/types';
 import { ServerResponse } from 'http';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import fetch from 'isomorphic-unfetch'
-
-
-// A simple Graphql server that wrap the Board Game Geek JS API
 import { parseBggXmlApi2SearchResponse, parseBggXmlApi2ThingResponse } from '@code-bucket/board-game-geek'
 
 const typeDefs = gql`
@@ -60,7 +59,7 @@ const resolvers = {
       return "hello world"
     },
 
-    async getBoardGame (parent, { id }, context, info) {
+    async getBoardGame (_parent, { id }, _context, _info) {
       const response = await fetch(`https://api.geekdo.com/xmlapi2/thing?id=${id}&versions=1`);
       const bggResponse = parseBggXmlApi2ThingResponse(await response.text());
       const thing = bggResponse.item;
@@ -69,14 +68,14 @@ const resolvers = {
       return thing
     },
 
-    async searchBoardGames (parent, { query }, context, info) {
+    async searchBoardGames (_parent, { query }, _context, _info) {
       const response = await fetch(`https://api.geekdo.com/xmlapi2/search?query=${query}`);
       const bggResponse = parseBggXmlApi2SearchResponse(await response.text());
       const search = bggResponse.items;
       return search
     },
 
-    async hotGames (parent, args, context, info) {
+    async hotGames (_parent, _args, _context, _info) {
       const response = await fetch('https://api.geekdo.com/xmlapi2/hot?boardgame');
       const bggResponse = parseBggXmlApi2SearchResponse(await response.text());
       const search = bggResponse.items;

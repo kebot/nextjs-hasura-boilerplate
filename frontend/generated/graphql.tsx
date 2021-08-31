@@ -29,6 +29,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  smallint: any;
   timestamptz: string;
   uuid: any;
 };
@@ -523,6 +524,10 @@ export type Mutation_Root = {
   delete_feeds?: Maybe<Feeds_Mutation_Response>;
   /** delete single row from the table: "feeds" */
   delete_feeds_by_pk?: Maybe<Feeds>;
+  /** delete data from the table: "reviews" */
+  delete_reviews?: Maybe<Reviews_Mutation_Response>;
+  /** delete single row from the table: "reviews" */
+  delete_reviews_by_pk?: Maybe<Reviews>;
   /** delete data from the table: "sessions" */
   delete_sessions?: Maybe<Sessions_Mutation_Response>;
   /** delete single row from the table: "sessions" */
@@ -543,6 +548,10 @@ export type Mutation_Root = {
   insert_feeds?: Maybe<Feeds_Mutation_Response>;
   /** insert a single row into the table: "feeds" */
   insert_feeds_one?: Maybe<Feeds>;
+  /** insert data into the table: "reviews" */
+  insert_reviews?: Maybe<Reviews_Mutation_Response>;
+  /** insert a single row into the table: "reviews" */
+  insert_reviews_one?: Maybe<Reviews>;
   /** insert data into the table: "sessions" */
   insert_sessions?: Maybe<Sessions_Mutation_Response>;
   /** insert a single row into the table: "sessions" */
@@ -563,6 +572,10 @@ export type Mutation_Root = {
   update_feeds?: Maybe<Feeds_Mutation_Response>;
   /** update single row of the table: "feeds" */
   update_feeds_by_pk?: Maybe<Feeds>;
+  /** update data of the table: "reviews" */
+  update_reviews?: Maybe<Reviews_Mutation_Response>;
+  /** update single row of the table: "reviews" */
+  update_reviews_by_pk?: Maybe<Reviews>;
   /** update data of the table: "sessions" */
   update_sessions?: Maybe<Sessions_Mutation_Response>;
   /** update single row of the table: "sessions" */
@@ -594,6 +607,16 @@ export type Mutation_RootDelete_FeedsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Feeds_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_ReviewsArgs = {
+  where: Reviews_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Reviews_By_PkArgs = {
   id: Scalars["uuid"];
 };
 
@@ -649,6 +672,18 @@ export type Mutation_RootInsert_FeedsArgs = {
 export type Mutation_RootInsert_Feeds_OneArgs = {
   object: Feeds_Insert_Input;
   on_conflict?: Maybe<Feeds_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_ReviewsArgs = {
+  objects: Array<Reviews_Insert_Input>;
+  on_conflict?: Maybe<Reviews_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Reviews_OneArgs = {
+  object: Reviews_Insert_Input;
+  on_conflict?: Maybe<Reviews_On_Conflict>;
 };
 
 /** mutation root */
@@ -709,6 +744,20 @@ export type Mutation_RootUpdate_FeedsArgs = {
 export type Mutation_RootUpdate_Feeds_By_PkArgs = {
   _set?: Maybe<Feeds_Set_Input>;
   pk_columns: Feeds_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_ReviewsArgs = {
+  _inc?: Maybe<Reviews_Inc_Input>;
+  _set?: Maybe<Reviews_Set_Input>;
+  where: Reviews_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Reviews_By_PkArgs = {
+  _inc?: Maybe<Reviews_Inc_Input>;
+  _set?: Maybe<Reviews_Set_Input>;
+  pk_columns: Reviews_Pk_Columns_Input;
 };
 
 /** mutation root */
@@ -781,6 +830,12 @@ export type Query_Root = {
   feeds_by_pk?: Maybe<Feeds>;
   getBoardGame?: Maybe<BoardGame>;
   hotGames?: Maybe<Array<Maybe<BggSearchResult>>>;
+  /** fetch data from the table: "reviews" */
+  reviews: Array<Reviews>;
+  /** fetch aggregated fields from the table: "reviews" */
+  reviews_aggregate: Reviews_Aggregate;
+  /** fetch data from the table: "reviews" using primary key columns */
+  reviews_by_pk?: Maybe<Reviews>;
   sayHello?: Maybe<Scalars["String"]>;
   searchBoardGames?: Maybe<Array<Maybe<BggSearchResult>>>;
   /** fetch data from the table: "sessions" */
@@ -847,6 +902,26 @@ export type Query_RootGetBoardGameArgs = {
   id: Scalars["Int"];
 };
 
+export type Query_RootReviewsArgs = {
+  distinct_on?: Maybe<Array<Reviews_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Reviews_Order_By>>;
+  where?: Maybe<Reviews_Bool_Exp>;
+};
+
+export type Query_RootReviews_AggregateArgs = {
+  distinct_on?: Maybe<Array<Reviews_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Reviews_Order_By>>;
+  where?: Maybe<Reviews_Bool_Exp>;
+};
+
+export type Query_RootReviews_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
 export type Query_RootSearchBoardGamesArgs = {
   query: Scalars["String"];
 };
@@ -909,6 +984,248 @@ export type Query_RootVerification_Requests_AggregateArgs = {
 
 export type Query_RootVerification_Requests_By_PkArgs = {
   id: Scalars["uuid"];
+};
+
+/** columns and relationships of "reviews" */
+export type Reviews = {
+  __typename?: "reviews";
+  /** An object relationship */
+  author?: Maybe<Users>;
+  author_id: Scalars["uuid"];
+  body: Scalars["String"];
+  created_at: Scalars["timestamptz"];
+  game_id: Scalars["Int"];
+  id: Scalars["uuid"];
+  rating: Scalars["smallint"];
+  updated_at: Scalars["timestamptz"];
+};
+
+/** aggregated selection of "reviews" */
+export type Reviews_Aggregate = {
+  __typename?: "reviews_aggregate";
+  aggregate?: Maybe<Reviews_Aggregate_Fields>;
+  nodes: Array<Reviews>;
+};
+
+/** aggregate fields of "reviews" */
+export type Reviews_Aggregate_Fields = {
+  __typename?: "reviews_aggregate_fields";
+  avg?: Maybe<Reviews_Avg_Fields>;
+  count: Scalars["Int"];
+  max?: Maybe<Reviews_Max_Fields>;
+  min?: Maybe<Reviews_Min_Fields>;
+  stddev?: Maybe<Reviews_Stddev_Fields>;
+  stddev_pop?: Maybe<Reviews_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Reviews_Stddev_Samp_Fields>;
+  sum?: Maybe<Reviews_Sum_Fields>;
+  var_pop?: Maybe<Reviews_Var_Pop_Fields>;
+  var_samp?: Maybe<Reviews_Var_Samp_Fields>;
+  variance?: Maybe<Reviews_Variance_Fields>;
+};
+
+/** aggregate fields of "reviews" */
+export type Reviews_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Reviews_Select_Column>>;
+  distinct?: Maybe<Scalars["Boolean"]>;
+};
+
+/** aggregate avg on columns */
+export type Reviews_Avg_Fields = {
+  __typename?: "reviews_avg_fields";
+  game_id?: Maybe<Scalars["Float"]>;
+  rating?: Maybe<Scalars["Float"]>;
+};
+
+/** Boolean expression to filter rows from the table "reviews". All fields are combined with a logical 'AND'. */
+export type Reviews_Bool_Exp = {
+  _and?: Maybe<Array<Reviews_Bool_Exp>>;
+  _not?: Maybe<Reviews_Bool_Exp>;
+  _or?: Maybe<Array<Reviews_Bool_Exp>>;
+  author?: Maybe<Users_Bool_Exp>;
+  author_id?: Maybe<Uuid_Comparison_Exp>;
+  body?: Maybe<String_Comparison_Exp>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  game_id?: Maybe<Int_Comparison_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  rating?: Maybe<Smallint_Comparison_Exp>;
+  updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "reviews" */
+export enum Reviews_Constraint {
+  /** unique or primary key constraint */
+  ReviewsPkey = "reviews_pkey",
+}
+
+/** input type for incrementing numeric columns in table "reviews" */
+export type Reviews_Inc_Input = {
+  game_id?: Maybe<Scalars["Int"]>;
+  rating?: Maybe<Scalars["smallint"]>;
+};
+
+/** input type for inserting data into table "reviews" */
+export type Reviews_Insert_Input = {
+  author?: Maybe<Users_Obj_Rel_Insert_Input>;
+  author_id?: Maybe<Scalars["uuid"]>;
+  body?: Maybe<Scalars["String"]>;
+  created_at?: Maybe<Scalars["timestamptz"]>;
+  game_id?: Maybe<Scalars["Int"]>;
+  id?: Maybe<Scalars["uuid"]>;
+  rating?: Maybe<Scalars["smallint"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]>;
+};
+
+/** aggregate max on columns */
+export type Reviews_Max_Fields = {
+  __typename?: "reviews_max_fields";
+  author_id?: Maybe<Scalars["uuid"]>;
+  body?: Maybe<Scalars["String"]>;
+  created_at?: Maybe<Scalars["timestamptz"]>;
+  game_id?: Maybe<Scalars["Int"]>;
+  id?: Maybe<Scalars["uuid"]>;
+  rating?: Maybe<Scalars["smallint"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]>;
+};
+
+/** aggregate min on columns */
+export type Reviews_Min_Fields = {
+  __typename?: "reviews_min_fields";
+  author_id?: Maybe<Scalars["uuid"]>;
+  body?: Maybe<Scalars["String"]>;
+  created_at?: Maybe<Scalars["timestamptz"]>;
+  game_id?: Maybe<Scalars["Int"]>;
+  id?: Maybe<Scalars["uuid"]>;
+  rating?: Maybe<Scalars["smallint"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]>;
+};
+
+/** response of any mutation on the table "reviews" */
+export type Reviews_Mutation_Response = {
+  __typename?: "reviews_mutation_response";
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars["Int"];
+  /** data from the rows affected by the mutation */
+  returning: Array<Reviews>;
+};
+
+/** on conflict condition type for table "reviews" */
+export type Reviews_On_Conflict = {
+  constraint: Reviews_Constraint;
+  update_columns?: Array<Reviews_Update_Column>;
+  where?: Maybe<Reviews_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "reviews". */
+export type Reviews_Order_By = {
+  author?: Maybe<Users_Order_By>;
+  author_id?: Maybe<Order_By>;
+  body?: Maybe<Order_By>;
+  created_at?: Maybe<Order_By>;
+  game_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  rating?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: reviews */
+export type Reviews_Pk_Columns_Input = {
+  id: Scalars["uuid"];
+};
+
+/** select columns of table "reviews" */
+export enum Reviews_Select_Column {
+  /** column name */
+  AuthorId = "author_id",
+  /** column name */
+  Body = "body",
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  GameId = "game_id",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Rating = "rating",
+  /** column name */
+  UpdatedAt = "updated_at",
+}
+
+/** input type for updating data in table "reviews" */
+export type Reviews_Set_Input = {
+  author_id?: Maybe<Scalars["uuid"]>;
+  body?: Maybe<Scalars["String"]>;
+  created_at?: Maybe<Scalars["timestamptz"]>;
+  game_id?: Maybe<Scalars["Int"]>;
+  id?: Maybe<Scalars["uuid"]>;
+  rating?: Maybe<Scalars["smallint"]>;
+  updated_at?: Maybe<Scalars["timestamptz"]>;
+};
+
+/** aggregate stddev on columns */
+export type Reviews_Stddev_Fields = {
+  __typename?: "reviews_stddev_fields";
+  game_id?: Maybe<Scalars["Float"]>;
+  rating?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Reviews_Stddev_Pop_Fields = {
+  __typename?: "reviews_stddev_pop_fields";
+  game_id?: Maybe<Scalars["Float"]>;
+  rating?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Reviews_Stddev_Samp_Fields = {
+  __typename?: "reviews_stddev_samp_fields";
+  game_id?: Maybe<Scalars["Float"]>;
+  rating?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate sum on columns */
+export type Reviews_Sum_Fields = {
+  __typename?: "reviews_sum_fields";
+  game_id?: Maybe<Scalars["Int"]>;
+  rating?: Maybe<Scalars["smallint"]>;
+};
+
+/** update columns of table "reviews" */
+export enum Reviews_Update_Column {
+  /** column name */
+  AuthorId = "author_id",
+  /** column name */
+  Body = "body",
+  /** column name */
+  CreatedAt = "created_at",
+  /** column name */
+  GameId = "game_id",
+  /** column name */
+  Id = "id",
+  /** column name */
+  Rating = "rating",
+  /** column name */
+  UpdatedAt = "updated_at",
+}
+
+/** aggregate var_pop on columns */
+export type Reviews_Var_Pop_Fields = {
+  __typename?: "reviews_var_pop_fields";
+  game_id?: Maybe<Scalars["Float"]>;
+  rating?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate var_samp on columns */
+export type Reviews_Var_Samp_Fields = {
+  __typename?: "reviews_var_samp_fields";
+  game_id?: Maybe<Scalars["Float"]>;
+  rating?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate variance on columns */
+export type Reviews_Variance_Fields = {
+  __typename?: "reviews_variance_fields";
+  game_id?: Maybe<Scalars["Float"]>;
+  rating?: Maybe<Scalars["Float"]>;
 };
 
 /** columns and relationships of "sessions" */
@@ -1139,6 +1456,19 @@ export type Sessions_Variance_Fields = {
   user_id?: Maybe<Scalars["Float"]>;
 };
 
+/** Boolean expression to compare columns of type "smallint". All fields are combined with logical 'AND'. */
+export type Smallint_Comparison_Exp = {
+  _eq?: Maybe<Scalars["smallint"]>;
+  _gt?: Maybe<Scalars["smallint"]>;
+  _gte?: Maybe<Scalars["smallint"]>;
+  _in?: Maybe<Array<Scalars["smallint"]>>;
+  _is_null?: Maybe<Scalars["Boolean"]>;
+  _lt?: Maybe<Scalars["smallint"]>;
+  _lte?: Maybe<Scalars["smallint"]>;
+  _neq?: Maybe<Scalars["smallint"]>;
+  _nin?: Maybe<Array<Scalars["smallint"]>>;
+};
+
 export type Subscription_Root = {
   __typename?: "subscription_root";
   /** fetch data from the table: "accounts" */
@@ -1153,6 +1483,12 @@ export type Subscription_Root = {
   feeds_aggregate: Feeds_Aggregate;
   /** fetch data from the table: "feeds" using primary key columns */
   feeds_by_pk?: Maybe<Feeds>;
+  /** fetch data from the table: "reviews" */
+  reviews: Array<Reviews>;
+  /** fetch aggregated fields from the table: "reviews" */
+  reviews_aggregate: Reviews_Aggregate;
+  /** fetch data from the table: "reviews" using primary key columns */
+  reviews_by_pk?: Maybe<Reviews>;
   /** fetch data from the table: "sessions" */
   sessions: Array<Sessions>;
   /** fetch aggregated fields from the table: "sessions" */
@@ -1210,6 +1546,26 @@ export type Subscription_RootFeeds_AggregateArgs = {
 };
 
 export type Subscription_RootFeeds_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+export type Subscription_RootReviewsArgs = {
+  distinct_on?: Maybe<Array<Reviews_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Reviews_Order_By>>;
+  where?: Maybe<Reviews_Bool_Exp>;
+};
+
+export type Subscription_RootReviews_AggregateArgs = {
+  distinct_on?: Maybe<Array<Reviews_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Reviews_Order_By>>;
+  where?: Maybe<Reviews_Bool_Exp>;
+};
+
+export type Subscription_RootReviews_By_PkArgs = {
   id: Scalars["uuid"];
 };
 
@@ -1664,6 +2020,18 @@ export type InsertFeedMutation = {
   insert_feeds_one?: Maybe<{ __typename?: "feeds"; id: any }>;
 };
 
+export type InsertReviewMutationVariables = Exact<{
+  author_id: Scalars["uuid"];
+  game_id: Scalars["Int"];
+  rating: Scalars["smallint"];
+  body?: Maybe<Scalars["String"]>;
+}>;
+
+export type InsertReviewMutation = {
+  __typename?: "mutation_root";
+  insert_reviews_one?: Maybe<{ __typename?: "reviews"; id: any }>;
+};
+
 export type UpdateUserMutationVariables = Exact<{
   userId: Scalars["uuid"];
   name?: Maybe<Scalars["String"]>;
@@ -1674,6 +2042,46 @@ export type UpdateUserMutation = {
   update_users?: Maybe<{
     __typename?: "users_mutation_response";
     returning: Array<{ __typename?: "users"; id: any; name?: Maybe<string> }>;
+  }>;
+};
+
+export type FetchHotGamesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type FetchHotGamesQuery = {
+  __typename?: "query_root";
+  hotGames?: Maybe<
+    Array<
+      Maybe<{
+        __typename?: "BggSearchResult";
+        name: string;
+        yearpublished: number;
+        id: number;
+      }>
+    >
+  >;
+};
+
+export type FetchReviewQueryVariables = Exact<{
+  author_id: Scalars["uuid"];
+  game_id: Scalars["Int"];
+}>;
+
+export type FetchReviewQuery = {
+  __typename?: "query_root";
+  reviews: Array<{
+    __typename?: "reviews";
+    body: string;
+    id: any;
+    rating: any;
+    game_id: number;
+    author_id: any;
+    author?: Maybe<{
+      __typename?: "users";
+      id: any;
+      image?: Maybe<string>;
+      name?: Maybe<string>;
+      email: string;
+    }>;
   }>;
 };
 
@@ -1805,6 +2213,121 @@ export type InsertFeedMutationOptions = Apollo.BaseMutationOptions<
   InsertFeedMutation,
   InsertFeedMutationVariables
 >;
+export const InsertReviewDocument = gql`
+  mutation InsertReview(
+    $author_id: uuid!
+    $game_id: Int!
+    $rating: smallint!
+    $body: String
+  ) {
+    insert_reviews_one(
+      object: {
+        author_id: $author_id
+        game_id: $game_id
+        rating: $rating
+        body: $body
+      }
+    ) {
+      id
+    }
+  }
+`;
+export type InsertReviewMutationFn = Apollo.MutationFunction<
+  InsertReviewMutation,
+  InsertReviewMutationVariables
+>;
+export type InsertReviewComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
+    InsertReviewMutation,
+    InsertReviewMutationVariables
+  >,
+  "mutation"
+>;
+
+export const InsertReviewComponent = (props: InsertReviewComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    InsertReviewMutation,
+    InsertReviewMutationVariables
+  >
+    mutation={InsertReviewDocument}
+    {...props}
+  />
+);
+
+export type InsertReviewProps<
+  TChildProps = {},
+  TDataName extends string = "mutate"
+> = {
+  [key in TDataName]: Apollo.MutationFunction<
+    InsertReviewMutation,
+    InsertReviewMutationVariables
+  >;
+} &
+  TChildProps;
+export function withInsertReview<
+  TProps,
+  TChildProps = {},
+  TDataName extends string = "mutate"
+>(
+  operationOptions?: ApolloReactHoc.OperationOption<
+    TProps,
+    InsertReviewMutation,
+    InsertReviewMutationVariables,
+    InsertReviewProps<TChildProps, TDataName>
+  >
+) {
+  return ApolloReactHoc.withMutation<
+    TProps,
+    InsertReviewMutation,
+    InsertReviewMutationVariables,
+    InsertReviewProps<TChildProps, TDataName>
+  >(InsertReviewDocument, {
+    alias: "insertReview",
+    ...operationOptions,
+  });
+}
+
+/**
+ * __useInsertReviewMutation__
+ *
+ * To run a mutation, you first call `useInsertReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [insertReviewMutation, { data, loading, error }] = useInsertReviewMutation({
+ *   variables: {
+ *      author_id: // value for 'author_id'
+ *      game_id: // value for 'game_id'
+ *      rating: // value for 'rating'
+ *      body: // value for 'body'
+ *   },
+ * });
+ */
+export function useInsertReviewMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    InsertReviewMutation,
+    InsertReviewMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    InsertReviewMutation,
+    InsertReviewMutationVariables
+  >(InsertReviewDocument, options);
+}
+export type InsertReviewMutationHookResult = ReturnType<
+  typeof useInsertReviewMutation
+>;
+export type InsertReviewMutationResult =
+  Apollo.MutationResult<InsertReviewMutation>;
+export type InsertReviewMutationOptions = Apollo.BaseMutationOptions<
+  InsertReviewMutation,
+  InsertReviewMutationVariables
+>;
 export const UpdateUserDocument = gql`
   mutation updateUser($userId: uuid!, $name: String) {
     update_users(where: { id: { _eq: $userId } }, _set: { name: $name }) {
@@ -1908,6 +2431,232 @@ export type UpdateUserMutationResult =
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<
   UpdateUserMutation,
   UpdateUserMutationVariables
+>;
+export const FetchHotGamesDocument = gql`
+  query fetchHotGames {
+    hotGames {
+      name
+      yearpublished
+      id
+    }
+  }
+`;
+export type FetchHotGamesComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    FetchHotGamesQuery,
+    FetchHotGamesQueryVariables
+  >,
+  "query"
+>;
+
+export const FetchHotGamesComponent = (props: FetchHotGamesComponentProps) => (
+  <ApolloReactComponents.Query<FetchHotGamesQuery, FetchHotGamesQueryVariables>
+    query={FetchHotGamesDocument}
+    {...props}
+  />
+);
+
+export type FetchHotGamesProps<
+  TChildProps = {},
+  TDataName extends string = "data"
+> = {
+  [key in TDataName]: ApolloReactHoc.DataValue<
+    FetchHotGamesQuery,
+    FetchHotGamesQueryVariables
+  >;
+} &
+  TChildProps;
+export function withFetchHotGames<
+  TProps,
+  TChildProps = {},
+  TDataName extends string = "data"
+>(
+  operationOptions?: ApolloReactHoc.OperationOption<
+    TProps,
+    FetchHotGamesQuery,
+    FetchHotGamesQueryVariables,
+    FetchHotGamesProps<TChildProps, TDataName>
+  >
+) {
+  return ApolloReactHoc.withQuery<
+    TProps,
+    FetchHotGamesQuery,
+    FetchHotGamesQueryVariables,
+    FetchHotGamesProps<TChildProps, TDataName>
+  >(FetchHotGamesDocument, {
+    alias: "fetchHotGames",
+    ...operationOptions,
+  });
+}
+
+/**
+ * __useFetchHotGamesQuery__
+ *
+ * To run a query within a React component, call `useFetchHotGamesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchHotGamesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchHotGamesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchHotGamesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FetchHotGamesQuery,
+    FetchHotGamesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FetchHotGamesQuery, FetchHotGamesQueryVariables>(
+    FetchHotGamesDocument,
+    options
+  );
+}
+export function useFetchHotGamesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FetchHotGamesQuery,
+    FetchHotGamesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<FetchHotGamesQuery, FetchHotGamesQueryVariables>(
+    FetchHotGamesDocument,
+    options
+  );
+}
+export type FetchHotGamesQueryHookResult = ReturnType<
+  typeof useFetchHotGamesQuery
+>;
+export type FetchHotGamesLazyQueryHookResult = ReturnType<
+  typeof useFetchHotGamesLazyQuery
+>;
+export type FetchHotGamesQueryResult = Apollo.QueryResult<
+  FetchHotGamesQuery,
+  FetchHotGamesQueryVariables
+>;
+export const FetchReviewDocument = gql`
+  query FetchReview($author_id: uuid!, $game_id: Int!) {
+    reviews(
+      where: { author_id: { _eq: $author_id }, game_id: { _eq: $game_id } }
+    ) {
+      body
+      id
+      rating
+      game_id
+      author_id
+      author {
+        id
+        image
+        name
+        email
+      }
+    }
+  }
+`;
+export type FetchReviewComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    FetchReviewQuery,
+    FetchReviewQueryVariables
+  >,
+  "query"
+> &
+  (
+    | { variables: FetchReviewQueryVariables; skip?: boolean }
+    | { skip: boolean }
+  );
+
+export const FetchReviewComponent = (props: FetchReviewComponentProps) => (
+  <ApolloReactComponents.Query<FetchReviewQuery, FetchReviewQueryVariables>
+    query={FetchReviewDocument}
+    {...props}
+  />
+);
+
+export type FetchReviewProps<
+  TChildProps = {},
+  TDataName extends string = "data"
+> = {
+  [key in TDataName]: ApolloReactHoc.DataValue<
+    FetchReviewQuery,
+    FetchReviewQueryVariables
+  >;
+} &
+  TChildProps;
+export function withFetchReview<
+  TProps,
+  TChildProps = {},
+  TDataName extends string = "data"
+>(
+  operationOptions?: ApolloReactHoc.OperationOption<
+    TProps,
+    FetchReviewQuery,
+    FetchReviewQueryVariables,
+    FetchReviewProps<TChildProps, TDataName>
+  >
+) {
+  return ApolloReactHoc.withQuery<
+    TProps,
+    FetchReviewQuery,
+    FetchReviewQueryVariables,
+    FetchReviewProps<TChildProps, TDataName>
+  >(FetchReviewDocument, {
+    alias: "fetchReview",
+    ...operationOptions,
+  });
+}
+
+/**
+ * __useFetchReviewQuery__
+ *
+ * To run a query within a React component, call `useFetchReviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchReviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchReviewQuery({
+ *   variables: {
+ *      author_id: // value for 'author_id'
+ *      game_id: // value for 'game_id'
+ *   },
+ * });
+ */
+export function useFetchReviewQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    FetchReviewQuery,
+    FetchReviewQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FetchReviewQuery, FetchReviewQueryVariables>(
+    FetchReviewDocument,
+    options
+  );
+}
+export function useFetchReviewLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FetchReviewQuery,
+    FetchReviewQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<FetchReviewQuery, FetchReviewQueryVariables>(
+    FetchReviewDocument,
+    options
+  );
+}
+export type FetchReviewQueryHookResult = ReturnType<typeof useFetchReviewQuery>;
+export type FetchReviewLazyQueryHookResult = ReturnType<
+  typeof useFetchReviewLazyQuery
+>;
+export type FetchReviewQueryResult = Apollo.QueryResult<
+  FetchReviewQuery,
+  FetchReviewQueryVariables
 >;
 export const FetchUserDocument = gql`
   query fetchUser($userId: uuid!) {
@@ -2263,6 +3012,30 @@ export type ResolversTypes = {
   mutation_root: ResolverTypeWrapper<{}>;
   order_by: Order_By;
   query_root: ResolverTypeWrapper<{}>;
+  reviews: ResolverTypeWrapper<Reviews>;
+  reviews_aggregate: ResolverTypeWrapper<Reviews_Aggregate>;
+  reviews_aggregate_fields: ResolverTypeWrapper<Reviews_Aggregate_Fields>;
+  reviews_avg_fields: ResolverTypeWrapper<Reviews_Avg_Fields>;
+  reviews_bool_exp: Reviews_Bool_Exp;
+  reviews_constraint: Reviews_Constraint;
+  reviews_inc_input: Reviews_Inc_Input;
+  reviews_insert_input: Reviews_Insert_Input;
+  reviews_max_fields: ResolverTypeWrapper<Reviews_Max_Fields>;
+  reviews_min_fields: ResolverTypeWrapper<Reviews_Min_Fields>;
+  reviews_mutation_response: ResolverTypeWrapper<Reviews_Mutation_Response>;
+  reviews_on_conflict: Reviews_On_Conflict;
+  reviews_order_by: Reviews_Order_By;
+  reviews_pk_columns_input: Reviews_Pk_Columns_Input;
+  reviews_select_column: Reviews_Select_Column;
+  reviews_set_input: Reviews_Set_Input;
+  reviews_stddev_fields: ResolverTypeWrapper<Reviews_Stddev_Fields>;
+  reviews_stddev_pop_fields: ResolverTypeWrapper<Reviews_Stddev_Pop_Fields>;
+  reviews_stddev_samp_fields: ResolverTypeWrapper<Reviews_Stddev_Samp_Fields>;
+  reviews_sum_fields: ResolverTypeWrapper<Reviews_Sum_Fields>;
+  reviews_update_column: Reviews_Update_Column;
+  reviews_var_pop_fields: ResolverTypeWrapper<Reviews_Var_Pop_Fields>;
+  reviews_var_samp_fields: ResolverTypeWrapper<Reviews_Var_Samp_Fields>;
+  reviews_variance_fields: ResolverTypeWrapper<Reviews_Variance_Fields>;
   sessions: ResolverTypeWrapper<Sessions>;
   sessions_aggregate: ResolverTypeWrapper<Sessions_Aggregate>;
   sessions_aggregate_fields: ResolverTypeWrapper<Sessions_Aggregate_Fields>;
@@ -2287,6 +3060,8 @@ export type ResolversTypes = {
   sessions_var_pop_fields: ResolverTypeWrapper<Sessions_Var_Pop_Fields>;
   sessions_var_samp_fields: ResolverTypeWrapper<Sessions_Var_Samp_Fields>;
   sessions_variance_fields: ResolverTypeWrapper<Sessions_Variance_Fields>;
+  smallint: ResolverTypeWrapper<Scalars["smallint"]>;
+  smallint_comparison_exp: Smallint_Comparison_Exp;
   subscription_root: ResolverTypeWrapper<{}>;
   timestamptz: ResolverTypeWrapper<Scalars["timestamptz"]>;
   timestamptz_comparison_exp: Timestamptz_Comparison_Exp;
@@ -2367,6 +3142,27 @@ export type ResolversParentTypes = {
   feeds_set_input: Feeds_Set_Input;
   mutation_root: {};
   query_root: {};
+  reviews: Reviews;
+  reviews_aggregate: Reviews_Aggregate;
+  reviews_aggregate_fields: Reviews_Aggregate_Fields;
+  reviews_avg_fields: Reviews_Avg_Fields;
+  reviews_bool_exp: Reviews_Bool_Exp;
+  reviews_inc_input: Reviews_Inc_Input;
+  reviews_insert_input: Reviews_Insert_Input;
+  reviews_max_fields: Reviews_Max_Fields;
+  reviews_min_fields: Reviews_Min_Fields;
+  reviews_mutation_response: Reviews_Mutation_Response;
+  reviews_on_conflict: Reviews_On_Conflict;
+  reviews_order_by: Reviews_Order_By;
+  reviews_pk_columns_input: Reviews_Pk_Columns_Input;
+  reviews_set_input: Reviews_Set_Input;
+  reviews_stddev_fields: Reviews_Stddev_Fields;
+  reviews_stddev_pop_fields: Reviews_Stddev_Pop_Fields;
+  reviews_stddev_samp_fields: Reviews_Stddev_Samp_Fields;
+  reviews_sum_fields: Reviews_Sum_Fields;
+  reviews_var_pop_fields: Reviews_Var_Pop_Fields;
+  reviews_var_samp_fields: Reviews_Var_Samp_Fields;
+  reviews_variance_fields: Reviews_Variance_Fields;
   sessions: Sessions;
   sessions_aggregate: Sessions_Aggregate;
   sessions_aggregate_fields: Sessions_Aggregate_Fields;
@@ -2388,6 +3184,8 @@ export type ResolversParentTypes = {
   sessions_var_pop_fields: Sessions_Var_Pop_Fields;
   sessions_var_samp_fields: Sessions_Var_Samp_Fields;
   sessions_variance_fields: Sessions_Variance_Fields;
+  smallint: Scalars["smallint"];
+  smallint_comparison_exp: Smallint_Comparison_Exp;
   subscription_root: {};
   timestamptz: Scalars["timestamptz"];
   timestamptz_comparison_exp: Timestamptz_Comparison_Exp;
@@ -2813,6 +3611,18 @@ export type Mutation_RootResolvers<
     ContextType,
     RequireFields<Mutation_RootDelete_Feeds_By_PkArgs, "id">
   >;
+  delete_reviews?: Resolver<
+    Maybe<ResolversTypes["reviews_mutation_response"]>,
+    ParentType,
+    ContextType,
+    RequireFields<Mutation_RootDelete_ReviewsArgs, "where">
+  >;
+  delete_reviews_by_pk?: Resolver<
+    Maybe<ResolversTypes["reviews"]>,
+    ParentType,
+    ContextType,
+    RequireFields<Mutation_RootDelete_Reviews_By_PkArgs, "id">
+  >;
   delete_sessions?: Resolver<
     Maybe<ResolversTypes["sessions_mutation_response"]>,
     ParentType,
@@ -2873,6 +3683,18 @@ export type Mutation_RootResolvers<
     ContextType,
     RequireFields<Mutation_RootInsert_Feeds_OneArgs, "object">
   >;
+  insert_reviews?: Resolver<
+    Maybe<ResolversTypes["reviews_mutation_response"]>,
+    ParentType,
+    ContextType,
+    RequireFields<Mutation_RootInsert_ReviewsArgs, "objects">
+  >;
+  insert_reviews_one?: Resolver<
+    Maybe<ResolversTypes["reviews"]>,
+    ParentType,
+    ContextType,
+    RequireFields<Mutation_RootInsert_Reviews_OneArgs, "object">
+  >;
   insert_sessions?: Resolver<
     Maybe<ResolversTypes["sessions_mutation_response"]>,
     ParentType,
@@ -2932,6 +3754,18 @@ export type Mutation_RootResolvers<
     ParentType,
     ContextType,
     RequireFields<Mutation_RootUpdate_Feeds_By_PkArgs, "pk_columns">
+  >;
+  update_reviews?: Resolver<
+    Maybe<ResolversTypes["reviews_mutation_response"]>,
+    ParentType,
+    ContextType,
+    RequireFields<Mutation_RootUpdate_ReviewsArgs, "where">
+  >;
+  update_reviews_by_pk?: Resolver<
+    Maybe<ResolversTypes["reviews"]>,
+    ParentType,
+    ContextType,
+    RequireFields<Mutation_RootUpdate_Reviews_By_PkArgs, "pk_columns">
   >;
   update_sessions?: Resolver<
     Maybe<ResolversTypes["sessions_mutation_response"]>,
@@ -3025,6 +3859,24 @@ export type Query_RootResolvers<
     ParentType,
     ContextType
   >;
+  reviews?: Resolver<
+    Array<ResolversTypes["reviews"]>,
+    ParentType,
+    ContextType,
+    RequireFields<Query_RootReviewsArgs, never>
+  >;
+  reviews_aggregate?: Resolver<
+    ResolversTypes["reviews_aggregate"],
+    ParentType,
+    ContextType,
+    RequireFields<Query_RootReviews_AggregateArgs, never>
+  >;
+  reviews_by_pk?: Resolver<
+    Maybe<ResolversTypes["reviews"]>,
+    ParentType,
+    ContextType,
+    RequireFields<Query_RootReviews_By_PkArgs, "id">
+  >;
   sayHello?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   searchBoardGames?: Resolver<
     Maybe<Array<Maybe<ResolversTypes["BggSearchResult"]>>>,
@@ -3086,6 +3938,226 @@ export type Query_RootResolvers<
     ContextType,
     RequireFields<Query_RootVerification_Requests_By_PkArgs, "id">
   >;
+};
+
+export type ReviewsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews"] = ResolversParentTypes["reviews"]
+> = {
+  author?: Resolver<Maybe<ResolversTypes["users"]>, ParentType, ContextType>;
+  author_id?: Resolver<ResolversTypes["uuid"], ParentType, ContextType>;
+  body?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  created_at?: Resolver<ResolversTypes["timestamptz"], ParentType, ContextType>;
+  game_id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["uuid"], ParentType, ContextType>;
+  rating?: Resolver<ResolversTypes["smallint"], ParentType, ContextType>;
+  updated_at?: Resolver<ResolversTypes["timestamptz"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_AggregateResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_aggregate"] = ResolversParentTypes["reviews_aggregate"]
+> = {
+  aggregate?: Resolver<
+    Maybe<ResolversTypes["reviews_aggregate_fields"]>,
+    ParentType,
+    ContextType
+  >;
+  nodes?: Resolver<Array<ResolversTypes["reviews"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Aggregate_FieldsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_aggregate_fields"] = ResolversParentTypes["reviews_aggregate_fields"]
+> = {
+  avg?: Resolver<
+    Maybe<ResolversTypes["reviews_avg_fields"]>,
+    ParentType,
+    ContextType
+  >;
+  count?: Resolver<
+    ResolversTypes["Int"],
+    ParentType,
+    ContextType,
+    RequireFields<Reviews_Aggregate_FieldsCountArgs, never>
+  >;
+  max?: Resolver<
+    Maybe<ResolversTypes["reviews_max_fields"]>,
+    ParentType,
+    ContextType
+  >;
+  min?: Resolver<
+    Maybe<ResolversTypes["reviews_min_fields"]>,
+    ParentType,
+    ContextType
+  >;
+  stddev?: Resolver<
+    Maybe<ResolversTypes["reviews_stddev_fields"]>,
+    ParentType,
+    ContextType
+  >;
+  stddev_pop?: Resolver<
+    Maybe<ResolversTypes["reviews_stddev_pop_fields"]>,
+    ParentType,
+    ContextType
+  >;
+  stddev_samp?: Resolver<
+    Maybe<ResolversTypes["reviews_stddev_samp_fields"]>,
+    ParentType,
+    ContextType
+  >;
+  sum?: Resolver<
+    Maybe<ResolversTypes["reviews_sum_fields"]>,
+    ParentType,
+    ContextType
+  >;
+  var_pop?: Resolver<
+    Maybe<ResolversTypes["reviews_var_pop_fields"]>,
+    ParentType,
+    ContextType
+  >;
+  var_samp?: Resolver<
+    Maybe<ResolversTypes["reviews_var_samp_fields"]>,
+    ParentType,
+    ContextType
+  >;
+  variance?: Resolver<
+    Maybe<ResolversTypes["reviews_variance_fields"]>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Avg_FieldsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_avg_fields"] = ResolversParentTypes["reviews_avg_fields"]
+> = {
+  game_id?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Max_FieldsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_max_fields"] = ResolversParentTypes["reviews_max_fields"]
+> = {
+  author_id?: Resolver<Maybe<ResolversTypes["uuid"]>, ParentType, ContextType>;
+  body?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  created_at?: Resolver<
+    Maybe<ResolversTypes["timestamptz"]>,
+    ParentType,
+    ContextType
+  >;
+  game_id?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes["uuid"]>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes["smallint"]>, ParentType, ContextType>;
+  updated_at?: Resolver<
+    Maybe<ResolversTypes["timestamptz"]>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Min_FieldsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_min_fields"] = ResolversParentTypes["reviews_min_fields"]
+> = {
+  author_id?: Resolver<Maybe<ResolversTypes["uuid"]>, ParentType, ContextType>;
+  body?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  created_at?: Resolver<
+    Maybe<ResolversTypes["timestamptz"]>,
+    ParentType,
+    ContextType
+  >;
+  game_id?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes["uuid"]>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes["smallint"]>, ParentType, ContextType>;
+  updated_at?: Resolver<
+    Maybe<ResolversTypes["timestamptz"]>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Mutation_ResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_mutation_response"] = ResolversParentTypes["reviews_mutation_response"]
+> = {
+  affected_rows?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  returning?: Resolver<
+    Array<ResolversTypes["reviews"]>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Stddev_FieldsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_stddev_fields"] = ResolversParentTypes["reviews_stddev_fields"]
+> = {
+  game_id?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Stddev_Pop_FieldsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_stddev_pop_fields"] = ResolversParentTypes["reviews_stddev_pop_fields"]
+> = {
+  game_id?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Stddev_Samp_FieldsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_stddev_samp_fields"] = ResolversParentTypes["reviews_stddev_samp_fields"]
+> = {
+  game_id?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Sum_FieldsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_sum_fields"] = ResolversParentTypes["reviews_sum_fields"]
+> = {
+  game_id?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes["smallint"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Var_Pop_FieldsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_var_pop_fields"] = ResolversParentTypes["reviews_var_pop_fields"]
+> = {
+  game_id?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Var_Samp_FieldsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_var_samp_fields"] = ResolversParentTypes["reviews_var_samp_fields"]
+> = {
+  game_id?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type Reviews_Variance_FieldsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["reviews_variance_fields"] = ResolversParentTypes["reviews_variance_fields"]
+> = {
+  game_id?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SessionsResolvers<
@@ -3323,6 +4395,11 @@ export type Sessions_Variance_FieldsResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export interface SmallintScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["smallint"], any> {
+  name: "smallint";
+}
+
 export type Subscription_RootResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["subscription_root"] = ResolversParentTypes["subscription_root"]
@@ -3368,6 +4445,27 @@ export type Subscription_RootResolvers<
     ParentType,
     ContextType,
     RequireFields<Subscription_RootFeeds_By_PkArgs, "id">
+  >;
+  reviews?: SubscriptionResolver<
+    Array<ResolversTypes["reviews"]>,
+    "reviews",
+    ParentType,
+    ContextType,
+    RequireFields<Subscription_RootReviewsArgs, never>
+  >;
+  reviews_aggregate?: SubscriptionResolver<
+    ResolversTypes["reviews_aggregate"],
+    "reviews_aggregate",
+    ParentType,
+    ContextType,
+    RequireFields<Subscription_RootReviews_AggregateArgs, never>
+  >;
+  reviews_by_pk?: SubscriptionResolver<
+    Maybe<ResolversTypes["reviews"]>,
+    "reviews_by_pk",
+    ParentType,
+    ContextType,
+    RequireFields<Subscription_RootReviews_By_PkArgs, "id">
   >;
   sessions?: SubscriptionResolver<
     Array<ResolversTypes["sessions"]>,
@@ -3714,6 +4812,20 @@ export type Resolvers<ContextType = any> = {
   feeds_mutation_response?: Feeds_Mutation_ResponseResolvers<ContextType>;
   mutation_root?: Mutation_RootResolvers<ContextType>;
   query_root?: Query_RootResolvers<ContextType>;
+  reviews?: ReviewsResolvers<ContextType>;
+  reviews_aggregate?: Reviews_AggregateResolvers<ContextType>;
+  reviews_aggregate_fields?: Reviews_Aggregate_FieldsResolvers<ContextType>;
+  reviews_avg_fields?: Reviews_Avg_FieldsResolvers<ContextType>;
+  reviews_max_fields?: Reviews_Max_FieldsResolvers<ContextType>;
+  reviews_min_fields?: Reviews_Min_FieldsResolvers<ContextType>;
+  reviews_mutation_response?: Reviews_Mutation_ResponseResolvers<ContextType>;
+  reviews_stddev_fields?: Reviews_Stddev_FieldsResolvers<ContextType>;
+  reviews_stddev_pop_fields?: Reviews_Stddev_Pop_FieldsResolvers<ContextType>;
+  reviews_stddev_samp_fields?: Reviews_Stddev_Samp_FieldsResolvers<ContextType>;
+  reviews_sum_fields?: Reviews_Sum_FieldsResolvers<ContextType>;
+  reviews_var_pop_fields?: Reviews_Var_Pop_FieldsResolvers<ContextType>;
+  reviews_var_samp_fields?: Reviews_Var_Samp_FieldsResolvers<ContextType>;
+  reviews_variance_fields?: Reviews_Variance_FieldsResolvers<ContextType>;
   sessions?: SessionsResolvers<ContextType>;
   sessions_aggregate?: Sessions_AggregateResolvers<ContextType>;
   sessions_aggregate_fields?: Sessions_Aggregate_FieldsResolvers<ContextType>;
@@ -3728,6 +4840,7 @@ export type Resolvers<ContextType = any> = {
   sessions_var_pop_fields?: Sessions_Var_Pop_FieldsResolvers<ContextType>;
   sessions_var_samp_fields?: Sessions_Var_Samp_FieldsResolvers<ContextType>;
   sessions_variance_fields?: Sessions_Variance_FieldsResolvers<ContextType>;
+  smallint?: GraphQLScalarType;
   subscription_root?: Subscription_RootResolvers<ContextType>;
   timestamptz?: GraphQLScalarType;
   users?: UsersResolvers<ContextType>;
