@@ -23,17 +23,17 @@ const Navbar: NextComponentType = () => {
   const linksForAllUsers = [
     {
       id: "home",
-      label: "Home",
+      label: "Hottest",
       href: "/",
     },
   ];
 
   const linksForAuthenticatedUsers = [
-    {
-      id: "feeds",
-      label: "Feeds",
-      href: "/feeds",
-    },
+    // {
+    //   id: "feeds",
+    //   label: "Feeds",
+    //   href: "/feeds",
+    // },
     {
       id: "myAccount",
       label: "My Account",
