@@ -30,11 +30,13 @@ const typeDefs = gql`
     links: [BggLink]!
     names: [BggName]!
     yearpublished: Int!
-    productcode: String!
-    width: Float!
-    length: Float!
-    depth: Float!
-    weight: Float!
+    description: String!
+    minplayers: Int!
+    maxplayers: Int
+    playingtime: Int
+    minplaytime: Int
+    maxplaytime: Int
+    minage: Int
   }
 
   type BggSearchResult {
@@ -63,8 +65,6 @@ const resolvers = {
       const response = await fetch(`https://api.geekdo.com/xmlapi2/thing?id=${id}&versions=1`);
       const bggResponse = parseBggXmlApi2ThingResponse(await response.text());
       const thing = bggResponse.item;
-      console.log(thing)
-
       return thing
     },
 

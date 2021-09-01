@@ -60,17 +60,19 @@ export type BggSearchResult = {
 
 export type BoardGame = {
   __typename?: "BoardGame";
-  depth: Scalars["Float"];
+  description: Scalars["String"];
   id: Scalars["Int"];
   image: Scalars["String"];
-  length: Scalars["Float"];
   links: Array<Maybe<BggLink>>;
+  maxplayers?: Maybe<Scalars["Int"]>;
+  maxplaytime?: Maybe<Scalars["Int"]>;
+  minage?: Maybe<Scalars["Int"]>;
+  minplayers: Scalars["Int"];
+  minplaytime?: Maybe<Scalars["Int"]>;
   names: Array<Maybe<BggName>>;
-  productcode: Scalars["String"];
+  playingtime?: Maybe<Scalars["Int"]>;
   thumbnail: Scalars["String"];
   type: Scalars["String"];
-  weight: Scalars["Float"];
-  width: Scalars["Float"];
   yearpublished: Scalars["Int"];
 };
 
@@ -2045,6 +2047,53 @@ export type UpdateUserMutation = {
   }>;
 };
 
+export type FetchGameDetailsQueryVariables = Exact<{
+  game_id: Scalars["Int"];
+}>;
+
+export type FetchGameDetailsQuery = {
+  __typename?: "query_root";
+  getBoardGame?: Maybe<{
+    __typename?: "BoardGame";
+    id: number;
+    image: string;
+    thumbnail: string;
+    type: string;
+    yearpublished: number;
+    maxplayers?: Maybe<number>;
+    maxplaytime?: Maybe<number>;
+    minage?: Maybe<number>;
+    minplayers: number;
+    minplaytime?: Maybe<number>;
+    playingtime?: Maybe<number>;
+    description: string;
+    names: Array<
+      Maybe<{
+        __typename?: "BggName";
+        sortindex?: Maybe<string>;
+        type: string;
+        value: string;
+      }>
+    >;
+  }>;
+  reviews: Array<{
+    __typename?: "reviews";
+    body: string;
+    id: any;
+    rating: any;
+    game_id: number;
+    author_id: any;
+    created_at: string;
+    author?: Maybe<{
+      __typename?: "users";
+      id: any;
+      image?: Maybe<string>;
+      name?: Maybe<string>;
+      email: string;
+    }>;
+  }>;
+};
+
 export type FetchHotGamesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type FetchHotGamesQuery = {
@@ -2431,6 +2480,150 @@ export type UpdateUserMutationResult =
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<
   UpdateUserMutation,
   UpdateUserMutationVariables
+>;
+export const FetchGameDetailsDocument = gql`
+  query FetchGameDetails($game_id: Int!) {
+    getBoardGame(id: $game_id) {
+      id
+      image
+      thumbnail
+      type
+      yearpublished
+      names {
+        sortindex
+        type
+        value
+      }
+      maxplayers
+      maxplaytime
+      minage
+      minplayers
+      minplaytime
+      playingtime
+      description
+    }
+    reviews(where: { game_id: { _eq: $game_id } }) {
+      body
+      id
+      rating
+      game_id
+      author_id
+      author {
+        id
+        image
+        name
+        email
+      }
+      created_at
+    }
+  }
+`;
+export type FetchGameDetailsComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    FetchGameDetailsQuery,
+    FetchGameDetailsQueryVariables
+  >,
+  "query"
+> &
+  (
+    | { variables: FetchGameDetailsQueryVariables; skip?: boolean }
+    | { skip: boolean }
+  );
+
+export const FetchGameDetailsComponent = (
+  props: FetchGameDetailsComponentProps
+) => (
+  <ApolloReactComponents.Query<
+    FetchGameDetailsQuery,
+    FetchGameDetailsQueryVariables
+  >
+    query={FetchGameDetailsDocument}
+    {...props}
+  />
+);
+
+export type FetchGameDetailsProps<
+  TChildProps = {},
+  TDataName extends string = "data"
+> = {
+  [key in TDataName]: ApolloReactHoc.DataValue<
+    FetchGameDetailsQuery,
+    FetchGameDetailsQueryVariables
+  >;
+} &
+  TChildProps;
+export function withFetchGameDetails<
+  TProps,
+  TChildProps = {},
+  TDataName extends string = "data"
+>(
+  operationOptions?: ApolloReactHoc.OperationOption<
+    TProps,
+    FetchGameDetailsQuery,
+    FetchGameDetailsQueryVariables,
+    FetchGameDetailsProps<TChildProps, TDataName>
+  >
+) {
+  return ApolloReactHoc.withQuery<
+    TProps,
+    FetchGameDetailsQuery,
+    FetchGameDetailsQueryVariables,
+    FetchGameDetailsProps<TChildProps, TDataName>
+  >(FetchGameDetailsDocument, {
+    alias: "fetchGameDetails",
+    ...operationOptions,
+  });
+}
+
+/**
+ * __useFetchGameDetailsQuery__
+ *
+ * To run a query within a React component, call `useFetchGameDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchGameDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchGameDetailsQuery({
+ *   variables: {
+ *      game_id: // value for 'game_id'
+ *   },
+ * });
+ */
+export function useFetchGameDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    FetchGameDetailsQuery,
+    FetchGameDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FetchGameDetailsQuery, FetchGameDetailsQueryVariables>(
+    FetchGameDetailsDocument,
+    options
+  );
+}
+export function useFetchGameDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FetchGameDetailsQuery,
+    FetchGameDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FetchGameDetailsQuery,
+    FetchGameDetailsQueryVariables
+  >(FetchGameDetailsDocument, options);
+}
+export type FetchGameDetailsQueryHookResult = ReturnType<
+  typeof useFetchGameDetailsQuery
+>;
+export type FetchGameDetailsLazyQueryHookResult = ReturnType<
+  typeof useFetchGameDetailsLazyQuery
+>;
+export type FetchGameDetailsQueryResult = Apollo.QueryResult<
+  FetchGameDetailsQuery,
+  FetchGameDetailsQueryVariables
 >;
 export const FetchHotGamesDocument = gql`
   query fetchHotGames {
@@ -2972,7 +3165,6 @@ export type ResolversTypes = {
   BggName: ResolverTypeWrapper<BggName>;
   BggSearchResult: ResolverTypeWrapper<BggSearchResult>;
   BoardGame: ResolverTypeWrapper<BoardGame>;
-  Float: ResolverTypeWrapper<Scalars["Float"]>;
   Int_comparison_exp: Int_Comparison_Exp;
   String_comparison_exp: String_Comparison_Exp;
   accounts: ResolverTypeWrapper<Accounts>;
@@ -3016,6 +3208,7 @@ export type ResolversTypes = {
   reviews_aggregate: ResolverTypeWrapper<Reviews_Aggregate>;
   reviews_aggregate_fields: ResolverTypeWrapper<Reviews_Aggregate_Fields>;
   reviews_avg_fields: ResolverTypeWrapper<Reviews_Avg_Fields>;
+  Float: ResolverTypeWrapper<Scalars["Float"]>;
   reviews_bool_exp: Reviews_Bool_Exp;
   reviews_constraint: Reviews_Constraint;
   reviews_inc_input: Reviews_Inc_Input;
@@ -3109,7 +3302,6 @@ export type ResolversParentTypes = {
   BggName: BggName;
   BggSearchResult: BggSearchResult;
   BoardGame: BoardGame;
-  Float: Scalars["Float"];
   Int_comparison_exp: Int_Comparison_Exp;
   String_comparison_exp: String_Comparison_Exp;
   accounts: Accounts;
@@ -3146,6 +3338,7 @@ export type ResolversParentTypes = {
   reviews_aggregate: Reviews_Aggregate;
   reviews_aggregate_fields: Reviews_Aggregate_Fields;
   reviews_avg_fields: Reviews_Avg_Fields;
+  Float: Scalars["Float"];
   reviews_bool_exp: Reviews_Bool_Exp;
   reviews_inc_input: Reviews_Inc_Input;
   reviews_insert_input: Reviews_Insert_Input;
@@ -3271,25 +3464,27 @@ export type BoardGameResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["BoardGame"] = ResolversParentTypes["BoardGame"]
 > = {
-  depth?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   image?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  length?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   links?: Resolver<
     Array<Maybe<ResolversTypes["BggLink"]>>,
     ParentType,
     ContextType
   >;
+  maxplayers?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  maxplaytime?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  minage?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  minplayers?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  minplaytime?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
   names?: Resolver<
     Array<Maybe<ResolversTypes["BggName"]>>,
     ParentType,
     ContextType
   >;
-  productcode?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  playingtime?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
   thumbnail?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   type?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  weight?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
-  width?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   yearpublished?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

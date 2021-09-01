@@ -1,0 +1,36 @@
+query FetchGameDetails($game_id: Int!) {
+  getBoardGame(id: $game_id) {
+    id
+    image
+    thumbnail
+    type
+    yearpublished
+    names {
+      sortindex
+      type
+      value
+    }
+    maxplayers
+    maxplaytime
+    minage
+    minplayers
+    minplaytime
+    playingtime
+    description
+  }
+
+  reviews(where: { game_id: { _eq: $game_id } }) {
+    body
+    id
+    rating
+    game_id
+    author_id
+    author {
+      id
+      image
+      name
+      email
+    }
+    created_at
+  }
+}
