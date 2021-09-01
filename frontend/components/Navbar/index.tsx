@@ -26,6 +26,11 @@ const Navbar: NextComponentType = () => {
       label: "Hottest",
       href: "/",
     },
+    {
+      id: "search",
+      label: "Search",
+      href: "/search"
+    }
   ];
 
   const linksForAuthenticatedUsers = [
@@ -34,6 +39,7 @@ const Navbar: NextComponentType = () => {
     //   label: "Feeds",
     //   href: "/feeds",
     // },
+
     {
       id: "myAccount",
       label: "My Account",
@@ -116,6 +122,7 @@ const Navbar: NextComponentType = () => {
                     </Box>
                   );
                 })}
+
                 {session &&
                   linksForAuthenticatedUsers.map((link) => {
                     return (

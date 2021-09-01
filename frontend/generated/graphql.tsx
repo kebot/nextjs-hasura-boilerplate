@@ -2143,6 +2143,17 @@ export type FetchUserQuery = {
   users_by_pk?: Maybe<{ __typename?: "users"; id: any; name?: Maybe<string> }>;
 };
 
+export type SearchBoardGamesQueryVariables = Exact<{
+  query: Scalars["String"];
+}>;
+
+export type SearchBoardGamesQuery = {
+  __typename?: "query_root";
+  searchBoardGames?: Maybe<
+    Array<Maybe<{ __typename?: "BggSearchResult"; id: number; name: string }>>
+  >;
+};
+
 export type FetchFeedsSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type FetchFeedsSubscription = {
@@ -2952,6 +2963,121 @@ export type FetchUserLazyQueryHookResult = ReturnType<
 export type FetchUserQueryResult = Apollo.QueryResult<
   FetchUserQuery,
   FetchUserQueryVariables
+>;
+export const SearchBoardGamesDocument = gql`
+  query SearchBoardGames($query: String!) {
+    searchBoardGames(query: $query) {
+      id
+      name
+    }
+  }
+`;
+export type SearchBoardGamesComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    SearchBoardGamesQuery,
+    SearchBoardGamesQueryVariables
+  >,
+  "query"
+> &
+  (
+    | { variables: SearchBoardGamesQueryVariables; skip?: boolean }
+    | { skip: boolean }
+  );
+
+export const SearchBoardGamesComponent = (
+  props: SearchBoardGamesComponentProps
+) => (
+  <ApolloReactComponents.Query<
+    SearchBoardGamesQuery,
+    SearchBoardGamesQueryVariables
+  >
+    query={SearchBoardGamesDocument}
+    {...props}
+  />
+);
+
+export type SearchBoardGamesProps<
+  TChildProps = {},
+  TDataName extends string = "data"
+> = {
+  [key in TDataName]: ApolloReactHoc.DataValue<
+    SearchBoardGamesQuery,
+    SearchBoardGamesQueryVariables
+  >;
+} &
+  TChildProps;
+export function withSearchBoardGames<
+  TProps,
+  TChildProps = {},
+  TDataName extends string = "data"
+>(
+  operationOptions?: ApolloReactHoc.OperationOption<
+    TProps,
+    SearchBoardGamesQuery,
+    SearchBoardGamesQueryVariables,
+    SearchBoardGamesProps<TChildProps, TDataName>
+  >
+) {
+  return ApolloReactHoc.withQuery<
+    TProps,
+    SearchBoardGamesQuery,
+    SearchBoardGamesQueryVariables,
+    SearchBoardGamesProps<TChildProps, TDataName>
+  >(SearchBoardGamesDocument, {
+    alias: "searchBoardGames",
+    ...operationOptions,
+  });
+}
+
+/**
+ * __useSearchBoardGamesQuery__
+ *
+ * To run a query within a React component, call `useSearchBoardGamesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchBoardGamesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchBoardGamesQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useSearchBoardGamesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchBoardGamesQuery,
+    SearchBoardGamesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SearchBoardGamesQuery, SearchBoardGamesQueryVariables>(
+    SearchBoardGamesDocument,
+    options
+  );
+}
+export function useSearchBoardGamesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchBoardGamesQuery,
+    SearchBoardGamesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    SearchBoardGamesQuery,
+    SearchBoardGamesQueryVariables
+  >(SearchBoardGamesDocument, options);
+}
+export type SearchBoardGamesQueryHookResult = ReturnType<
+  typeof useSearchBoardGamesQuery
+>;
+export type SearchBoardGamesLazyQueryHookResult = ReturnType<
+  typeof useSearchBoardGamesLazyQuery
+>;
+export type SearchBoardGamesQueryResult = Apollo.QueryResult<
+  SearchBoardGamesQuery,
+  SearchBoardGamesQueryVariables
 >;
 export const FetchFeedsDocument = gql`
   subscription fetchFeeds {
